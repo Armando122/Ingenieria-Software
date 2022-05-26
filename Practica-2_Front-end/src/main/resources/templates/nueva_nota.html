@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Notas</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous"></script>
+    <style>
+        #tarjeta {
+            border: 1px solid lightgray;
+            border-radius: 11px;
+            padding: 22px;
+            box-shadow: 2px 2px lightgray;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col">
+        </div>
+        <div class="col-8">
+            <h1>Nota</h1>
+            <div id="tarjeta">
+                <form method="post" th:action="@{/notas/procesa}">
+                    <div class="mb-3">
+                        <label for="titulo" class="form-label">Título de la nota</label>
+                        <input type="text" id="titulo" name="titulo" class="form-control"
+                               placeholder="Introduce el título" required/>
+                    </div>
+                    <div class="form-floating">
+                        <textarea class="form-control" placeholder="Introduce tu texto aquí" id="nota" name="nota"
+                                  style="height: 100px"></textarea>
+                        <label for="nota">Aquí va tu nota</label>
+                    </div>
+                    <button style="margin-top: 14px;" class="btn btn-warning" type="submit">Enviar</button>
+                </form>
+            </div>
+            <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/usuarios/}" style="margin-top: 13px"> Lista de Usuarios </a>
+            <br/>
+            <a class="btn btn-warning" th:href="@{/salir}" style="margin-top: 13px"> Salir </a>
+        </div>
+        <div class="col">
+        </div>
+    </div>
+</div>
+</body>
+</html>
