@@ -7,22 +7,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface NotaRepositorio extends JpaRepository<Nota, Integer> {
+public interface NotaRepositorio extends JpaRepository<Nota, Long> {
 
-    List<Nota> findAllByIdUsuario(Integer idUsuario);
+    List<Nota> findAllById(Integer idNota);
 
-    @Query("select n from Nota n where n.idUsuario = ?1")
-    List<Nota> encuentraNotasPorIdUsuario(Integer idUsuario);
-
-    @Query("select n from Nota n JOIN Usuario u ON u.idUsuario = n.idUsuario AND u.idUsuario = ?1")
-    List<Nota> encuentraNotaPorIdUsuarioJoin(Integer idUsuario);
-
-    @Query(value = "select n.* from Nota n where n.idUsuario = ?1", nativeQuery = true)
-    List<Nota> encuentraNotasPorIdUsuarioSQLNativo(Integer idUsuario);
-
-    @Query("select new com.example.proyecto.dto.NotaDto(n.titulo, n.texto, n.usuario.nombre)  from Nota n where n.idUsuario = ?1")
-    List<NotaDto> encuentraNotasPorIdUsuarioCamposEspecificos(Integer idUsuario);
-    //select n from Nota n where n.idUsuario in (select u.idUsuario from Usuario u where u.idUsuario = ?1)
+    @Query("select n from Nota n where n.idNota = ?1")
+    Optional<Nota> findNotaById(Integer idNota);
 }

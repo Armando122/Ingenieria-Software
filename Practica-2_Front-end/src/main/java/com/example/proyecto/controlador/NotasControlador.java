@@ -14,32 +14,74 @@ import java.security.Principal;
 @RequestMapping("/notas")
 public class NotasControlador {
 
-    @Autowired
-    private NotaServicio notaServicio;
+    /*Atributos*/
+    private final NotaServicio notaServicio;
 
     @Autowired
-    private NotaRepositorio notaRepositorio;
+    NotaControlador(NotaServicio notaServicio){
+        this.notaServicio = notaServicio;
+    }
 
-    @RequestMapping("/")
-    public String nuevaNota() {
+    @GetMapping("/agregar")
+    public String agregarNota(){
         return "nueva_nota";
     }
 
-    @PostMapping("/procesa")
-    public String procesa(HttpServletRequest request, Model model, Principal principal) {
-        notaServicio.agregaNota(
-                principal.getName(),
-                request.getParameter("titulo"),
-                request.getParameter("nota"));
-        model.addAttribute("notas", notaServicio.todas(principal.getName()));
-        return "final";
+    @PostMapping("/agregar")
+    public String registra(HttpServletRequest request, Model model){
+        Competidor nuevoCompetidor = new Competidor(
+                request.getParameter("nombre"),
+                request.getParameter("disciplina")
+        );
+        competidorServicio.agregaCompetidor(nuevoCompetidor);
+        model.addAttribute("competidores", competidorServicio.getCompetidores());
+        return "competidor/consultar";
     }
 
+    @GetMapping("/eliminar")
+    public String eliminarCompetidor(Model model){
+        model.addAttribute("competidores",competidorServicio.getCompetidores());
+        return "competidor/eliminar";
+    }
 
-    @GetMapping("/spec")
-    @ResponseBody
-    public String notas_spec() {
-        return notaRepositorio.encuentraNotasPorIdUsuarioCamposEspecificos(1).toString();
+    @GetMapping("/eliminar/{id}")
+    public String eliminarCompetidor(@PathVariable("id") Long id, Model model){
+        model.addAttribute("competidor", competidorServicio.getCompetidor(id));
+        return "competidor/eliminarcompetidor";
+    }
+
+    @PostMapping("/eliminar")
+    public String borra(HttpServletRequest request, Model model){
+        competidorServicio.eliminaCompetidor(Long.parseLong(request.getParameter("id")));
+        model.addAttribute("competidores",competidorServicio.getCompetidores());
+        return "competidor/eliminar";
+    }
+
+    @GetMapping("/consultar")
+    public String consultaCompetidor(Model model){
+        model.addAttribute("competidores",competidorServicio.getCompetidores());
+        return "competidor/consultar";
+    }
+
+    @GetMapping("/actualizar")
+    public String actualizaCompetidor(Model model){
+        model.addAttribute("competidores",competidorServicio.getCompetidores());
+        return "competidor/actualizar";
+    }
+
+    @GetMapping("/actualizar/{id}")
+    public String actualizaCompetidor(@PathVariable("id") Long id, Model model){
+        model.addAttribute("competidor",competidorServicio.getCompetidor(id));
+        return "competidor/actualizarcompetidor";
+    }
+
+    @PostMapping("/actualizar")
+    public String actualiza(HttpServletRequest request, Model model){
+        competidorServicio.actualizaCompetidor(Long.parseLong(request.getParameter("id")),
+                request.getParameter("nombre"),
+                request.getParameter("disciplina"));
+        model.addAttribute("competidores", competidorServicio.getCompetidores());
+        return "competidor/actualizar";
     }
 
 }

@@ -1,25 +1,25 @@
 package com.example.proyecto.modelo;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Data
+@AllArgsConstructor
+@ToString
+@NoArgsConstructor
 @Entity
-@Table(name="nota")
+@Table(name = "nota")
 public class Nota {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idnota")
-    private Integer idNota;
-    @Column
-    private String titulo;
-    @Column
-    private String texto;
-    @Column(name = "idusuario")
-    private Integer idUsuario;
+    @Getter @Setter private Long id;
 
-    @ManyToOne(targetEntity = Usuario.class)
-    @JoinColumn(name = "idusuario", referencedColumnName = "idusuario", nullable = false, insertable = false, updatable = false)
-    private Usuario usuario;
+    @Column
+    @Getter @Setter private String titulo;
+
+    @Column
+    @Getter @Setter private String contenido;
+
+    //@Column
+    //colorprivate String texto;
 }
